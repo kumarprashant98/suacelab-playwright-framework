@@ -6,6 +6,8 @@ import { PlayWrightHelper } from "../../utilities/PlayWrightHelper";
 const homeHeaderText = ".app_logo"
 const inventoryList = "div[data-test = 'inventory-item-name']"
 const addToCartIcon = "#shopping_cart_container"
+const filterDropdown = "//select[@class = 'product_sort_container']"
+const listFilterDropdown = "//select[@class = 'product_sort_container']//option"
 
 
 
@@ -30,8 +32,17 @@ export class HomePage extends BasePage{
     clickOnAddToCartIcon = async () => await this.clickOn(addToCartIcon);
     
     getSelectedItem = () =>  this.randomitem;
+    
+    selectRandomFilter = async () =>{
+        const filteroptions = await this.getListText(listFilterDropdown)
+        const randomfilteritem = this.playwrighthelper.getRandomStringFromList(filteroptions);
+        console.log("Selected Filter:", randomfilteritem);
 
+        //Select option use as it is a dropdown
+        await this.selectDropDownValue(filterDropdown,randomfilteritem);
+      
     }
+}
 
 
 
