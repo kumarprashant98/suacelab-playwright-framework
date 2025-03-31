@@ -1,0 +1,2 @@
+Step 1: Verify that the home page is displayed
+Step 2: Click on the filter icon

@@ -1,0 +1,3 @@
+Step 1: Verify that the home page is displayed
+Step 2: Select a random option from filter
+Selected Filter: Price (low to high)

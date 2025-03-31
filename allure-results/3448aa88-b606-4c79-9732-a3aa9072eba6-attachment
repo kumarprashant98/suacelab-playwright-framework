@@ -1,0 +1,223 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Home Page test >> Apply filter on the Home page
+- Location: C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:19:9
+
+# Error details
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('//option[text() = \'Name (A to Z)\']')
+    - locator resolved to <option value="az">Name (A to Z)</option>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    55 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+    at HomePage.clickOn (C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\pageObject\BasePage.ts:29:19)
+    at HomePage.addRandomFilter (C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\pageObject\homePage\HomePage.ts:42:20)
+    at C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:30:9
+```
+
+# Page snapshot
+
+```yaml
+- button "Open Menu"
+- img "Open Menu"
+- text: Swag Labs Products Name (A to Z)
+- combobox:
+  - option "Name (A to Z)" [selected]
+  - option "Name (Z to A)"
+  - option "Price (low to high)"
+  - option "Price (high to low)"
+- link "Sauce Labs Backpack":
+  - img "Sauce Labs Backpack"
+- link "Sauce Labs Backpack"
+- text: carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection. $29.99
+- button "Add to cart"
+- link "Sauce Labs Bike Light":
+  - img "Sauce Labs Bike Light"
+- link "Sauce Labs Bike Light"
+- text: A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included. $9.99
+- button "Add to cart"
+- link "Sauce Labs Bolt T-Shirt":
+  - img "Sauce Labs Bolt T-Shirt"
+- link "Sauce Labs Bolt T-Shirt"
+- text: Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt. $15.99
+- button "Add to cart"
+- link "Sauce Labs Fleece Jacket":
+  - img "Sauce Labs Fleece Jacket"
+- link "Sauce Labs Fleece Jacket"
+- text: It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office. $49.99
+- button "Add to cart"
+- link "Sauce Labs Onesie":
+  - img "Sauce Labs Onesie"
+- link "Sauce Labs Onesie"
+- text: Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel. $7.99
+- button "Add to cart"
+- link "Test.allTheThings() T-Shirt (Red)":
+  - img "Test.allTheThings() T-Shirt (Red)"
+- link "Test.allTheThings() T-Shirt (Red)"
+- text: This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton. $15.99
+- button "Add to cart"
+- contentinfo:
+  - list:
+    - listitem:
+      - link "Twitter"
+    - listitem:
+      - link "Facebook"
+    - listitem:
+      - link "LinkedIn"
+  - text: © 2025 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy
+```
+
+# Test source
+
+```ts
+   1 | import test, { Page } from "@playwright/test";
+   2 | //import fs from 'fs';
+   3 | const fs = require('fs');
+   4 | //import path from 'path';
+   5 | const path = require('path');
+   6 | const pdfParse = require('pdf-parse');
+   7 | //import { PdfReport } from "../dataObject/PdfReport";
+   8 | const downloadReportPath = path.join(__dirname, "../", "sauceLabDownloadReports");
+   9 |
+   10 | export class BasePage {
+   11 |
+   12 |     constructor(public page:Page){
+   13 |     }
+   14 |
+   15 |    async navigateToUrl(){
+   16 |     //Navigate to Home Page
+   17 |     const baseURL = test.info().project.use.baseURL;
+   18 |     if(!baseURL) throw new Error("Base URL is not defined in the Playwright config");
+   19 |     await this.page.goto(baseURL);
+   20 |    }
+   21 | enterText = async (Locator:string, value:string) => await this.page.locator(Locator).fill(value);
+   22 |
+   23 | //clickOn = async (locator: string) => await this.page.locator(locator).click();
+   24 |
+   25 | clickOn = async (locator: string) => {
+   26 |   
+   27 |     const element = this.page.locator(locator);
+   28 |     // Click the element
+>  29 |     await element.click();
+      |                   ^ Error: locator.click: Test timeout of 30000ms exceeded.
+   30 |   
+   31 |   };
+   32 |   
+   33 |   doubleClickOn = async (locator:string) => await this.page.locator(locator).dblclick();
+   34 |     
+   35 |   getText = async (locator:string) => await this.page.locator(locator).textContent();
+   36 |   
+   37 |   getListText = async (locator: string) => await this.page.locator(locator).allTextContents();
+   38 |     /**
+   39 |     * Clicks on the specified locator.
+   40 |     * @param {Locator} locator - The Playwright locator to be clicked.
+   41 |     */
+   42 |   logoIsDisplayed = async (locator:string) => await this.page.locator(locator).isDisabled();
+   43 |     
+   44 |   elements = async (locator:string) => await this.page.locator(locator).elementHandle(); 
+   45 |   
+   46 |   checksBox = async (locator:string) => await this.page.locator(locator).isChecked(); 
+   47 |   
+   48 |   checkBox = async(locator:string) => await this.page.locator(locator).uncheck(); 
+   49 |   
+   50 |   elementIsVisble =  async(locator:string) => await this.page.locator(locator).isVisible(); 
+   51 |     
+   52 |   CopyToTicketNumeber =async (locator:string) => await this.page.locator(locator).innerText();
+   53 |   
+   54 |   clearTextbox = async (locator:string) => await this.page.locator(locator).clear();
+   55 |   
+   56 |   getValue = async (locator:string) => await this.page.locator(locator).innerText(); 
+   57 |   
+   58 |   getStatusLabelText = async (locator:string) => await this.page.locator(locator).innerText();
+   59 |   
+   60 |   /**
+   61 |         * Clicks on the specified locator.
+   62 |         * @param {Locator} locator - The Playwright locator to be clicked.
+   63 |         * @param {string} dropDownValue - The Playwright locator to be clicked.
+   64 |         */
+   65 |      selectDropDownValue = async (locator: string, dropDownValue: string, forceClick: boolean = false) => await this.page.locator(locator).selectOption({label: dropDownValue});
+   66 |   
+   67 |     /**
+   68 |     * Clicks on the specified locator.
+   69 |     * @param {Locator} locator - The Playwright locator to be clicked.
+   70 |     */
+   71 |     //clickOnButton = async (locator: string, forceClick: boolean = false) => await this.page.locator(locator).click({ force: forceClick });
+   72 |   
+   73 |   
+   74 |     downloadFile = async (printPackageLabel: string, title: string = "") => {
+   75 |       
+   76 |       //delete downloaded file first
+   77 |       const filePath = path.join(downloadReportPath, title || 'PackageLabel.pdf');
+   78 |       this.deleteFile(filePath);
+   79 |   
+   80 |       // download the file
+   81 |       const [download] = await Promise.all([
+   82 |       this.page.waitForEvent('download'),
+   83 |       this.clickOn(printPackageLabel),
+   84 |       ]);
+   85 |   
+   86 |   
+   87 |       // Create the directory if it doesn't exist
+   88 |       if (!fs.existsSync(downloadReportPath)) {
+   89 |           fs.mkdirSync(downloadReportPath, { recursive: true });
+   90 |       }
+   91 |   
+   92 |       // Save the downloaded file to the correct path
+   93 |       await download.saveAs(filePath);
+   94 |       console.log(`File saved successfully at: ${filePath}`);
+   95 |   }
+   96 |   
+   97 |   checkFileDownloaded = async (fileName: string) => {
+   98 |       const filePath = path.join(downloadReportPath, fileName);
+   99 |       return fs.existsSync(filePath);
+  100 |   }
+  101 |   
+  102 |   readPdfReport = async (fileName) => {
+  103 |   
+  104 |       const filePath = path.join(downloadReportPath, fileName);
+  105 |   
+  106 |       // Check if the file exists
+  107 |       if (!fs.existsSync(filePath)) {
+  108 |           console.error(`File not found: ${filePath}`);
+  109 |           return;
+  110 |       }
+  111 |   
+  112 |       // Read the file
+  113 |       const dataBuffer = fs.readFileSync(filePath);
+  114 |   
+  115 |       // Parse the PDF
+  116 |       try {
+  117 |           const pdfData = await pdfParse(dataBuffer);
+  118 |   
+  119 |           //let extractedText = pdfData.replace(/\s+/g, ' ').trim();
+  120 |   
+  121 |           //console.log("Extract the text from the PDF" , extractedText.text)
+  122 |           // Extracted text from the PDF
+  123 |          console.log("Extracted text from PDF: ", pdfData.text);
+  124 |   
+  125 |           // You can return or process the text as needed
+  126 |           //return extractedText.text;
+  127 |           return pdfData.text;
+  128 |       } catch (error) {
+  129 |           console.error("Error reading PDF file: ", error);
+```
