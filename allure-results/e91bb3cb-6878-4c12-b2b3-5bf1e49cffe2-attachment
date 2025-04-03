@@ -1,0 +1,131 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Home Page test >> Redirect to new page and perform action
+- Location: C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:50:9
+
+# Error details
+
+```
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: "Sign in"
+Received: {Symbol(async_id_symbol): 14916, Symbol(trigger_async_id_symbol): 6379, Symbol(kResourceStore): undefined}
+    at C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:66:28
+```
+
+# Page snapshot
+
+```yaml
+- banner:
+  - link "Sauce Labs":
+    - img "Sauce Labs"
+- heading "Sign in" [level=3]
+- group:
+  - text: User Name
+  - textbox "User Name"
+  - text: Password
+  - textbox "Password"
+  - text: Remember username
+  - checkbox "Remember username"
+  - link "I forgot my password"
+  - button "Log in"
+- paragraph: or sign in with
+- navigation:
+  - list:
+    - listitem:
+      - link "Authenticate with Google Google":
+        - img "Authenticate with Google"
+        - text: Google
+    - listitem:
+      - link "Authenticate with GitHub GitHub":
+        - img "Authenticate with GitHub"
+        - text: GitHub
+    - listitem:
+      - link "Authenticate with SSO SSO":
+        - img "Authenticate with SSO"
+        - text: SSO
+- text: Not a customer?
+- link "Try for free"
+```
+
+# Test source
+
+```ts
+   1 | import {expect, test} from "@playwright/test";
+   2 | import { LoginData } from "../../dataFactory/LoginData";
+   3 | import { LoginPage } from "../../pageObject/login/LoginPage";
+   4 | import { log } from "console";
+   5 | import { HomePage } from "../../pageObject/homePage/HomePage";
+   6 | import { waitForDebugger } from "inspector";
+   7 | import { sign } from "crypto";
+   8 |
+   9 | let i: number = 1;
+  10 | let homepage : HomePage;
+  11 | let login : LoginPage;
+  12 | test.describe('Home Page test', () =>{
+  13 |
+  14 |     test.beforeEach(async ({ page }) =>{
+  15 |         login = new LoginPage(page);
+  16 |         homepage = new HomePage(page);
+  17 |         
+  18 |         const loginDetails = LoginData.getLoginValidDetails();
+  19 |         await login.navigateToUrl();
+  20 |         await login.loginToApplication(loginDetails);
+  21 |     })
+  22 |    
+  23 |     test('Apply filter on the Home page', async({page}) => {
+  24 |     
+  25 |         
+  26 |         log(`Step ${i}: Verify that the home page is displayed`)
+  27 |         const homeHeaderText = await homepage.getHomePageHeaderText();
+  28 |         expect(homeHeaderText).toBe("Swag Labs")
+  29 |
+  30 |         log(`Step ${++i}: Select a random option from filter`)
+  31 |         await homepage.selectRandomFilter();
+  32 |     })
+  33 |
+  34 |     test('Click on the Social Media Links', async ({page}) => {
+  35 |         
+  36 |         log(`Scroll to the bottom of the home page`)
+  37 |         await homepage.scrollToBottom();
+  38 |
+  39 |         log('Verify social media icons visible')
+  40 |         await homepage.socialMediaLogoIsVisible();
+  41 |         
+  42 |         log('Click on the linkedln link');
+  43 |         const newPage = await homepage.getLinkedInNewTab(page);
+  44 |         const newPageURL = newPage.url();
+  45 |         
+  46 |         log('Assert linkedin website is displayed')
+  47 |         expect(newPageURL).toContain("linkedin.com");
+  48 |     })
+  49 |
+  50 |     test('Redirect to new page and perform action', async({page}) =>{
+  51 |         log('Verify that the home page is displayed')
+  52 |         const homeHeaderText = await homepage.getHomePageHeaderText();
+  53 |         expect(homeHeaderText).toBe("Swag Labs")
+  54 |
+  55 |         log('Click on the Menu button')
+  56 |         await homepage.clickOnTheMenuButton();
+  57 |         
+  58 |         log('Click on the About SideBar')
+  59 |         await homepage.clickOnTheAboutSideBar();
+  60 |
+  61 |         log('Click on the Dashboard tab')
+  62 |         await homepage.clickOnTheDashboardTab();
+  63 |
+  64 |         log('Assert Sign In Screen is displayed')
+  65 |         const signInText = homepage.getSignInText();
+> 66 |         expect(signInText).toBe("Sign in");
+     |                            ^ Error: expect(received).toBe(expected) // Object.is equality
+  67 |         
+  68 |
+  69 |     })
+  70 | })
+```

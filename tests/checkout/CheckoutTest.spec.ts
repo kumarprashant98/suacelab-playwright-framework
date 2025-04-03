@@ -1,28 +1,27 @@
 import test, { expect } from "@playwright/test";
-import { LoginPage } from "../../pageObject/login/LoginPage";
-import { Login } from "../../dataObject/Login";
-import { LoginData } from "../../dataFactory/LoginData";
 import { log } from "console";
-import { HomePage } from "../../pageObject/homePage/HomePage";
-import { CartPage } from "../../pageObject/cartPage/CartPage";
-import { CheckOutPage } from "../../pageObject/checkOutPage/CheckOutPage";
 import { CheckoutData } from "../../dataFactory/CheckoutData";
+import { LoginData } from "../../dataFactory/LoginData";
+import { CartPage } from "../../pageObject/cartPage/CartPage";
 import { CheckOutOverview } from "../../pageObject/checkoutOverviewPage/CheckOutOverviewPage";
+import { CheckOutPage } from "../../pageObject/checkOutPage/CheckOutPage";
+import { HomePage } from "../../pageObject/homePage/HomePage";
+import { LoginPage } from "../../pageObject/login/LoginPage";
 
 let i: number = 1;
 
-test.describe('Checkout item test', () =>{
+test.describe('Checkout item test', () => {
 
-    test.beforeEach(async ({ page }) =>{
+    test.beforeEach(async ({ page }) => {
         const login = new LoginPage(page);
-        
+
         const loginDetails = LoginData.getLoginValidDetails();
         await login.navigateToUrl();
         await login.loginToApplication(loginDetails);
     })
 
-    test('Verify that an item is successfully added to the cart and the checkout process is completed. ', async({page}) => {
-        
+    test('Verify that an item is successfully added to the cart and the checkout process is completed. ', async ({ page }) => {
+
         const homePage = new HomePage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckOutPage(page);
@@ -52,7 +51,7 @@ test.describe('Checkout item test', () =>{
 
         log(`Step ${++i}: Click on the Continue Button`)
         await checkoutPage.clickOnCheckoutContinueButton();
-       
+
         log(`Step ${++i}: Click on the Finish Button`)
         await checkoutOverviewPage.clickOnFinishButton();
 

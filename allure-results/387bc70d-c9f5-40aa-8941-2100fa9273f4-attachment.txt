@@ -1,0 +1,4 @@
+Verify that the home page is displayed
+Click on the Menu button
+Click on the About SideBar
+Click on the Dashboard tab

@@ -1,0 +1,9 @@
+Step 1: Add item To cart
+Step 2: Click on the cart icon
+Step 3: Assert added item displayed on cart page
+Step 4: Click on the Checkout button
+Step 5: Assert Checkout Screen is displayed
+Step 6: Enter checkout Details
+Step 7: Click on the Continue Button
+Step 8: Click on the Finish Button
+Step 9: Verify Success Message is Displayed

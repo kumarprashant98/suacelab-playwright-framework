@@ -1,0 +1,96 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Home Page test >> Click on the Social Media Links
+- Location: C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:33:9
+
+# Error details
+
+```
+Error: page.waitForLoadState: Target page, context or browser has been closed
+=========================== logs ===========================
+  "domcontentloaded" event fired
+============================================================
+    at HomePage.getLinkedInNewTab (C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\pageObject\homePage\HomePage.ts:61:22)
+    at C:\Users\prashant\Desktop\Git-Testing\suacelab-playwright-framework\tests\home\HomeTest.spec.ts:42:25
+```
+
+# Test source
+
+```ts
+   1 | import { BrowserContext, Page } from "@playwright/test";
+   2 | import { BasePage } from "../BasePage";
+   3 | import { PlayWrightHelper } from "../../utilities/PlayWrightHelper";
+   4 |
+   5 | //Locators
+   6 | const homeHeaderText = ".app_logo"
+   7 | const inventoryList = "div[data-test = 'inventory-item-name']"
+   8 | const addToCartIcon = "#shopping_cart_container"
+   9 | const filterDropdown = "//select[@class = 'product_sort_container']"
+  10 | const listFilterDropdown = "//select[@class = 'product_sort_container']//option"
+  11 | const twitterLink = "//a[text() = 'Twitter']"
+  12 | const facebookLink = "//a[text() = 'Facebook']"
+  13 | const linkedinLink = "//a[text() = 'LinkedIn']"
+  14 |
+  15 |
+  16 | export class HomePage extends BasePage{
+  17 |     randomitem : string = " ";
+  18 |     constructor(page : Page){
+  19 |         super(page);
+  20 |     }
+  21 |
+  22 |     playwrighthelper = new PlayWrightHelper();
+  23 |
+  24 |     getHomePageHeaderText = async () => await this.getText(homeHeaderText);
+  25 |     
+  26 |     addRandomItemToCart = async () =>{
+  27 |         const items = await this.getListText(inventoryList)
+  28 |         this.randomitem = this.playwrighthelper.getRandomStringFromList(items);
+  29 |         const itemXpath = `//div[text()='${this.randomitem}']/parent::a/parent::div/following-sibling::div//button`;
+  30 |         await this.clickOn(itemXpath)
+  31 |         
+  32 |         }
+  33 |
+  34 |     clickOnAddToCartIcon = async () => await this.clickOn(addToCartIcon);
+  35 |     
+  36 |     getSelectedItem = () =>  this.randomitem;
+  37 |     
+  38 |     selectRandomFilter = async () =>{
+  39 |         const filteroptions = await this.getListText(listFilterDropdown)
+  40 |         const randomfilteritem = this.playwrighthelper.getRandomStringFromList(filteroptions);
+  41 |         console.log("Selected Filter:", randomfilteritem);
+  42 |
+  43 |         //Select option use as it is a dropdown
+  44 |         await this.selectDropDownValue(filterDropdown,randomfilteritem);
+  45 |       
+  46 |     }
+  47 |
+  48 |     socialMediaLogoIsVisible = async () =>{
+  49 |         await this.elementIsVisble(twitterLink);
+  50 |         await this.elementIsVisble(facebookLink);
+  51 |         await this.elementIsVisble(linkedinLink)
+  52 |     }
+  53 |     
+  54 |     clickOnLinkedinLink = async () => await this.clickOn(linkedinLink);
+  55 |
+  56 |     getLinkedInNewTab = async (page: Page) =>{
+  57 |        const [newPage] = await Promise.all([
+  58 |             page.waitForEvent('popup'), //Capture new tab
+  59 |             this.clickOnLinkedinLink()
+  60 |        ])
+> 61 |        await newPage.waitForLoadState();
+     |                      ^ Error: page.waitForLoadState: Target page, context or browser has been closed
+  62 |        return newPage;
+  63 |     } 
+  64 | }
+  65 |
+  66 |
+  67 |
+  68 |     
+  69 |
+```

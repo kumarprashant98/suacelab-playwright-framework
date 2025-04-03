@@ -10,6 +10,6 @@ export class BaseTest {
     async navigateToBaseURL() {
         const base = new BasePage(this.page);
         await base.navigateToUrl();
-        
+
     }
 }

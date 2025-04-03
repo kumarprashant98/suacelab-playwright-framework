@@ -1,0 +1,2 @@
+Step 1 : Click on a Product Title
+Step 2 : Verify product details are displayed

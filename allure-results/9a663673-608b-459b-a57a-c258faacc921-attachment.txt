@@ -1,0 +1,4 @@
+Scroll to the bottom of the home page
+Verify social media icons visible
+Click on the linkedln link
+Assert linkedin website is displayed

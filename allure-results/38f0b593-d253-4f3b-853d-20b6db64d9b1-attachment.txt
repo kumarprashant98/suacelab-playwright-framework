@@ -1,0 +1,4 @@
+Step 1 : Click on a Product Title
+Step 2 : Verify product details are displayed
+Step 3 : Click on add to cart button
+Step 4 : Verify cart badge is added

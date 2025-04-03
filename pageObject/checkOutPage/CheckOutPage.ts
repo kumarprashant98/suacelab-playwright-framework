@@ -1,8 +1,8 @@
 import { Page } from "@playwright/test";
 import { BasePage } from "../BasePage";
 
-export class CheckOutPage extends BasePage{
-    constructor(page : Page){
+export class CheckOutPage extends BasePage {
+    constructor(page: Page) {
         super(page)
     }
 
@@ -15,11 +15,11 @@ export class CheckOutPage extends BasePage{
 
     getCheckoutPageHeaderText = async () => await this.getText(this.checkOutPageHeaderText)
 
-    checkoutInformation = async (firstname : string, lastname : string, postalcode : string) =>{
+    checkoutInformation = async (firstname: string, lastname: string, postalcode: string) => {
         await this.enterText(this.checkOutFirstName, firstname)
         await this.enterText(this.checkOutLastName, lastname)
         await this.enterText(this.checkOutPostalCode, postalcode)
-         
+
     }
 
     clickOnCheckoutContinueButton = async () => await this.clickOn(this.checkOutContinueButton)
